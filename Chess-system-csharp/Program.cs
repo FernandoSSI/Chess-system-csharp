@@ -1,4 +1,5 @@
 ﻿using boardgame;
+using Chess_system_csharp.boardgame;
 
 namespace Chess_system_csharp
 {
@@ -6,7 +7,6 @@ namespace Chess_system_csharp
     {
         static void Main(string[] args)
         {
-           
         }
     }
 }
