@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using boardgame;
 
 namespace Chess_system_csharp.boardgame
 {
@@ -27,6 +28,12 @@ namespace Chess_system_csharp.boardgame
         public Piece piece(int row, int col)
         {
             return Pieces[row, col];
+        }
+
+        public void putPiece(Piece p, Position pos)
+        {
+            Pieces[pos.row, pos.col] = p;
+            p.Position = pos;
         }
     }
 }
