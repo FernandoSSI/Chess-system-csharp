@@ -7,6 +7,9 @@ namespace Chess_system_csharp
     {
         static void Main(string[] args)
         {
+            Board board = new Board(8, 8);
+
+            UI.printBoard(board);
         }
     }
 }

@@ -23,5 +23,10 @@ namespace Chess_system_csharp.boardgame
             Cols = cols;
             Pieces = new Piece[rows, cols];
         }
+
+        public Piece piece(int row, int col)
+        {
+            return Pieces[row, col];
+        }
     }
 }
