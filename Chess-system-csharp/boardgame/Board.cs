@@ -30,10 +30,43 @@ namespace Chess_system_csharp.boardgame
             return Pieces[row, col];
         }
 
+        public Piece piece(Position pos)
+        {
+            return Pieces[pos.row, pos.col];
+        }
+
+        public bool existPiece(Position pos)
+        {
+            validatePosition(pos);
+            return piece(pos) != null;
+        }
+
         public void putPiece(Piece p, Position pos)
         {
+            if (existPiece(pos))
+            {
+                throw new BoardException("There is already a piece in that position")
+            }
             Pieces[pos.row, pos.col] = p;
             p.Position = pos;
+        }
+
+        public bool validPosition(Position pos)
+        {
+            if (pos.row < 0 || pos.row >= Rows || pos.col < 0 || pos.col >= Cols)
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+        public void validatePosition(Position pos)
+        {
+            if (!validPosition(pos)) 
+            {
+                throw new BoardException("invalid Position!");
+            }
         }
     }
 }

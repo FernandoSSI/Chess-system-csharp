@@ -27,5 +27,7 @@ namespace Chess_system_csharp.boardgame
             MovementQt = 0;
             Board = board;
         }
+
+        
     }
 }
