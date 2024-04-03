@@ -45,7 +45,7 @@ namespace Chess_system_csharp.boardgame
         {
             if (existPiece(pos))
             {
-                throw new BoardException("There is already a piece in that position")
+                throw new BoardException("There is already a piece in that position");
             }
             Pieces[pos.row, pos.col] = p;
             p.Position = pos;

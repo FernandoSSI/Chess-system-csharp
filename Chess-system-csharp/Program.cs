@@ -8,11 +8,11 @@ namespace Chess_system_csharp
     {
         static void Main(string[] args)
         {
-            Board board = new Board(8, 8);
 
-            board.putPiece(new Rook(board, Color.White), new Position(0, 0));
-            board.putPiece(new King(board, Color.White), new Position(0, 3));
-            UI.printBoard(board);
+            ChessPosition pos = new ChessPosition('a', 1);
+            Console.WriteLine(pos);
+
+            Console.WriteLine(pos.toPosition());
         }
     }
 }
