@@ -14,19 +14,36 @@ namespace Chess_system_csharp
         {
             for (int i = 0; i< board.Rows; i++)
             {
+                Console.Write(8 - i + " ");
                 for (int j = 0; j< board.Cols; j++)
                 {
                     if(board.piece(i, j) != null)
                     {
-                        Console.Write(board.piece(i, j) + " ");
+                        printPiece(board.piece(i, j));
+                        Console.Write(" ");
                     }
                     else
                     {
                         Console.Write("- ");
+
                     }
                     
                 }
                 Console.WriteLine();
+            }
+        }
+
+        public static void printPiece(Piece piece) 
+        {
+            if(piece.Color == Color.White)
+            {
+                Console.Write(piece);
+            } else
+            {
+                ConsoleColor aux = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(piece);
+                Console.ForegroundColor = aux;
             }
         }
     }
