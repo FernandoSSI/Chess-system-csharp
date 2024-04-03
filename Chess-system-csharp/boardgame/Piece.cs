@@ -28,6 +28,11 @@ namespace Chess_system_csharp.boardgame
             Board = board;
         }
 
+        public void movementIncrement()
+        {
+            MovementQt++;
+        }
+
         
     }
 }

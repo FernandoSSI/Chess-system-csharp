@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chess_system_csharp.boardgame;
+using Chess_system_csharp.ChessGame;
 
 namespace Chess_system_csharp
 {
@@ -25,12 +26,11 @@ namespace Chess_system_csharp
                     else
                     {
                         Console.Write("- ");
-
                     }
-                    
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine("  a b c d e f g h");
         }
 
         public static void printPiece(Piece piece) 
@@ -45,6 +45,15 @@ namespace Chess_system_csharp
                 Console.Write(piece);
                 Console.ForegroundColor = aux;
             }
+        }
+
+        public static ChessPosition readChessPosition()
+        {
+            string s = Console.ReadLine();
+            char col = s[0];
+            int row = int.Parse(s[1] + "");
+            return new ChessPosition(col, row);
+
         }
     }
 }

@@ -8,14 +8,32 @@ namespace Chess_system_csharp
     {
         static void Main(string[] args)
         {
-            Board board = new Board(8, 8);
+           try {
+                ChessMatch match = new ChessMatch();
 
-            board.putPiece(new Rook(board, Color.White), new Position(0, 0));
-            board.putPiece(new King(board, Color.Black), new Position(3, 4));
-            board.putPiece(new Rook(board, Color.White), new Position(0, 7));
-            board.putPiece(new Rook(board, Color.Black), new Position(7, 0));
+                while (!match.finished)
+                {
+                    Console.Clear();
+                    UI.printBoard(match.Board);
 
-            UI.printBoard(board);
+                    Console.WriteLine();
+                    Console.Write("Origin: ");
+                    Position origin = UI.readChessPosition().toPosition();
+                    Console.Write("Destiny: ");
+                    Position destiny = UI.readChessPosition().toPosition();
+                    
+                    match.pieceMoevement(origin, destiny);  
+                
+                }
+
+                
+            } 
+            catch (BoardException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.WriteLine();
         }
     }
 }

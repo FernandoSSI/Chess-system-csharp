@@ -51,6 +51,19 @@ namespace Chess_system_csharp.boardgame
             p.Position = pos;
         }
 
+        public Piece removePiece(Position pos)
+        {
+            if (piece(pos) == null)
+            {
+                return null;
+            } 
+            Piece aux = piece(pos);
+            aux.Position = null;
+
+            Pieces[pos.row, pos.col] = null;
+            return aux;
+        }
+
         public bool validPosition(Position pos)
         {
             if (pos.row < 0 || pos.row >= Rows || pos.col < 0 || pos.col >= Cols)
