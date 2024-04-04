@@ -8,7 +8,8 @@ namespace Chess_system_csharp
     {
         static void Main(string[] args)
         {
-           try {
+            try
+            {
                 ChessMatch match = new ChessMatch();
 
                 while (!match.finished)
@@ -19,15 +20,21 @@ namespace Chess_system_csharp
                     Console.WriteLine();
                     Console.Write("Origin: ");
                     Position origin = UI.readChessPosition().toPosition();
+                    bool[,] possiblePositions = match.Board.piece(origin).possibleMovements();
+
+                    Console.Clear();
+                    UI.printBoard(match.Board, possiblePositions);
+
+                    Console.WriteLine();
                     Console.Write("Destiny: ");
                     Position destiny = UI.readChessPosition().toPosition();
-                    
-                    match.pieceMoevement(origin, destiny);  
-                
+
+                    match.pieceMoevement(origin, destiny);
+
                 }
 
-                
-            } 
+
+            }
             catch (BoardException e)
             {
                 Console.WriteLine(e.Message);

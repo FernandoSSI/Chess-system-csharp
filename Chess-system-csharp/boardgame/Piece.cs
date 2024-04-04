@@ -7,7 +7,7 @@ using boardgame;
 
 namespace Chess_system_csharp.boardgame
 {
-    internal class Piece
+    internal  abstract class Piece
     {
         public Position Position {  get; set; }
         public Color Color { get; protected set; }
@@ -33,6 +33,10 @@ namespace Chess_system_csharp.boardgame
             MovementQt++;
         }
 
-        
+
+        public abstract bool[,] possibleMovements();
+
+
+
     }
 }

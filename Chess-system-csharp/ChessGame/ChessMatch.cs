@@ -36,6 +36,8 @@ namespace Chess_system_csharp.ChessGame
         private void putPieces()
         {
             Board.putPiece(new Rook(Board, Color.White), new ChessPosition('c', 1).toPosition());
+            Board.putPiece(new King(Board, Color.White), new ChessPosition('d', 1).toPosition());
+            Board.putPiece(new King(Board, Color.Black), new ChessPosition('a', 8).toPosition());
         }
     }
 }
