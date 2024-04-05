@@ -14,24 +14,36 @@ namespace Chess_system_csharp
 
                 while (!match.finished)
                 {
-                    Console.Clear();
-                    UI.printBoard(match.Board);
+                    try
+                    {
+                        Console.Clear();
+                        UI.printBoard(match.Board);
+                        Console.WriteLine();
+                        Console.WriteLine("Turn: " + match.turn);
+                        Console.WriteLine("Waiting for move: " + match.currentPlayer);
 
-                    Console.WriteLine();
-                    Console.Write("Origin: ");
-                    Position origin = UI.readChessPosition().toPosition();
-                    bool[,] possiblePositions = match.Board.piece(origin).possibleMovements();
+                        Console.WriteLine();
+                        Console.Write("Origin: ");
+                        Position origin = UI.readChessPosition().toPosition();
 
-                    Console.Clear();
-                    UI.printBoard(match.Board, possiblePositions);
+                        match.validateOriginPosition(origin);
+                        bool[,] possiblePositions = match.Board.piece(origin).possibleMovements();
 
-                    Console.WriteLine();
-                    Console.Write("Destiny: ");
-                    Position destiny = UI.readChessPosition().toPosition();
+                        Console.Clear();
+                        UI.printBoard(match.Board, possiblePositions);
 
-                    match.pieceMoevement(origin, destiny);
-
-                }
+                        Console.WriteLine();
+                        Console.Write("Destiny: ");
+                        Position destiny = UI.readChessPosition().toPosition();
+                        match.validateDestinyPosition(origin, destiny);
+                        match.makePlay(origin, destiny);
+                    } catch (BoardException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.ReadLine();
+                    }
+                } 
+                
 
 
             }

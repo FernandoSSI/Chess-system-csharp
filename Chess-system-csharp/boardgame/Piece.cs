@@ -33,6 +33,27 @@ namespace Chess_system_csharp.boardgame
             MovementQt++;
         }
 
+        public bool therePossibleMovements()
+        {
+            bool[,] mat = possibleMovements();
+            for (int i = 0; i< Board.Rows; i++)
+            {
+                for(int j = 0; i< Board.Cols; j++)
+                {
+                    if (mat[i, j])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool canMoveTo(Position pos)
+        {
+            return possibleMovements()[pos.row, pos.col];
+        }
+
 
         public abstract bool[,] possibleMovements();
 

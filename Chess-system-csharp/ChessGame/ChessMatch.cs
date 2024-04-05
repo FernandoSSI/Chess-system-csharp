@@ -12,8 +12,8 @@ namespace Chess_system_csharp.ChessGame
     {
 
         public Board Board {  get; private set; }
-        private int turn;
-        private Color currentPlayer;
+        public int turn {  get; private set; }
+        public Color currentPlayer {  get; private set; }
         public bool finished {  get; private set; }
 
         public ChessMatch()
@@ -31,6 +31,49 @@ namespace Chess_system_csharp.ChessGame
             p.movementIncrement();
             Piece capturedPiece = Board.removePiece(destiny);
             Board.putPiece(p, destiny);
+        }
+
+        public void makePlay(Position origin, Position destiny)
+        {
+            pieceMoevement(origin, destiny);
+            turn++;
+            changePlayer();
+        }
+
+        public void validateOriginPosition(Position pos)
+        {
+            if (Board.piece(pos) == null)
+            {
+                throw new BoardException("There is no piece in the chosen position");
+            }
+
+            if(currentPlayer != Board.piece(pos).Color) {
+                throw new BoardException("it is not the turn of the chosen piece");
+            }
+
+            if (Board.piece(pos).therePossibleMovements() == false)
+            {
+                throw new BoardException("There are no possible moves for this piece");
+            }
+        }
+
+        public void validateDestinyPosition(Position origin, Position destiny)
+        {
+            if (!Board.piece(origin).canMoveTo(destiny))
+            {
+                throw new BoardException("Invalid destiny position");
+            }
+        }
+
+        private void changePlayer()
+        {
+            if(currentPlayer == Color.White)
+            {
+                currentPlayer = Color.Black;
+            } else
+            {
+                currentPlayer = Color.White;
+            }
         }
 
         private void putPieces()
