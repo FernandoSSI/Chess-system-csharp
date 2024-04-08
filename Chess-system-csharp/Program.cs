@@ -17,10 +17,7 @@ namespace Chess_system_csharp
                     try
                     {
                         Console.Clear();
-                        UI.printBoard(match.Board);
-                        Console.WriteLine();
-                        Console.WriteLine("Turn: " + match.turn);
-                        Console.WriteLine("Waiting for move: " + match.currentPlayer);
+                        UI.printMatch(match);
 
                         Console.WriteLine();
                         Console.Write("Origin: ");
@@ -44,8 +41,6 @@ namespace Chess_system_csharp
                     }
                 } 
                 
-
-
             }
             catch (BoardException e)
             {

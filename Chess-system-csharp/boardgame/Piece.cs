@@ -38,7 +38,7 @@ namespace Chess_system_csharp.boardgame
             bool[,] mat = possibleMovements();
             for (int i = 0; i< Board.Rows; i++)
             {
-                for(int j = 0; i< Board.Cols; j++)
+                for(int j = 0; j< Board.Cols; j++)
                 {
                     if (mat[i, j])
                     {
