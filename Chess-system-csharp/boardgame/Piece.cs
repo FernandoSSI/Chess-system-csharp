@@ -33,6 +33,11 @@ namespace Chess_system_csharp.boardgame
             MovementQt++;
         }
 
+        public void movementDecrement()
+        {
+            MovementQt++;
+        }
+
         public bool therePossibleMovements()
         {
             bool[,] mat = possibleMovements();

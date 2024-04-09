@@ -17,6 +17,7 @@ namespace Chess_system_csharp.ChessGame
         public bool finished {  get; private set; }
         private HashSet<Piece> pieces;
         private HashSet<Piece> capturedPieces;
+        public bool Check {  get; private set; }
 
         public ChessMatch()
         {
@@ -26,10 +27,11 @@ namespace Chess_system_csharp.ChessGame
             finished = false;
             pieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
+            Check = false;
             putPieces();
         }
 
-        public void pieceMoevement(Position origin, Position destiny)
+        public Piece pieceMoevement(Position origin, Position destiny)
         {
             Piece p = Board.removePiece(origin);
             p.movementIncrement();
@@ -38,11 +40,39 @@ namespace Chess_system_csharp.ChessGame
             if(capturedPiece != null) {
                 capturedPieces.Add(capturedPiece);
             }
+            return capturedPiece;
+        }
+
+        public void undoMovement(Position origin, Position destiny, Piece capturedPiece)
+        {
+            Piece p = Board.removePiece(destiny);
+            p.movementDecrement();
+            if(capturedPiece != null)
+            {
+                Board.putPiece(capturedPiece, destiny);
+                capturedPieces.Remove(capturedPiece);
+            }
+            Board.putPiece(p, origin);
         }
 
         public void makePlay(Position origin, Position destiny)
         {
-            pieceMoevement(origin, destiny);
+            Piece capturedPiece = pieceMoevement(origin, destiny);
+
+            if (inCheck(currentPlayer))
+            {
+                undoMovement(origin, destiny, capturedPiece);
+                throw new BoardException("you can't put yourself in check");
+            }
+
+            if(inCheck(adversary(currentPlayer)))
+            {
+                Check = true;
+            } else
+            {
+                Check = false;
+            }
+
             turn++;
             changePlayer();
         }
@@ -111,6 +141,50 @@ namespace Chess_system_csharp.ChessGame
             aux.ExceptWith(CapturedPieces(color));
             return aux;
         }
+
+        private Color adversary(Color color)
+        {
+            if (color == Color.White)
+            {
+                return Color.Black;
+            } else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece king(Color color)
+        {
+            foreach(Piece x in piecesInPlay(color))
+            {
+                if(x is King)
+                {
+                    return x;
+                }
+                
+            }
+            return null;
+        }
+
+        public bool inCheck(Color color)
+        {
+            foreach(Piece x in piecesInPlay(adversary(color)))
+            {
+                Piece k = king(color);
+                if(k == null)
+                {
+                    throw new BoardException("Dont exist king");
+                }
+                bool[,] mat = x.possibleMovements();
+                if (mat[k.Position.row, k.Position.col])
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
 
         public void putNewPiece(char col, int row, Piece piece)
         {

@@ -33,6 +33,11 @@ namespace Chess_system_csharp
             printSet(match.CapturedPieces(Color.Black));
             Console.ForegroundColor = aux;
             Console.WriteLine();
+
+            if (match.Check)
+            {
+                Console.WriteLine("Check!");
+            }
         }
 
         public static void printSet(HashSet<Piece> set)
