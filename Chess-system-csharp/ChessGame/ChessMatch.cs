@@ -73,6 +73,12 @@ namespace Chess_system_csharp.ChessGame
                 Check = false;
             }
 
+            if (checkmateTest(adversary(currentPlayer)))
+            {
+                finished = true;
+                changePlayer();
+            }
+
             turn++;
             changePlayer();
         }
@@ -185,6 +191,37 @@ namespace Chess_system_csharp.ChessGame
             return false;
         }
 
+        public bool checkmateTest(Color color)
+        {
+            if (!inCheck(color))
+            {
+                return false;
+            }
+
+            foreach(Piece x in piecesInPlay(color))
+            {
+                bool[,] mat = x.possibleMovements();
+                for(int i=0; i<Board.Rows; i++)
+                {
+                    for(int j=0; j<Board.Cols; j++)
+                    {
+                        if (mat[i, j])
+                        {
+                            Position origin = x.Position;
+                            Position destiny = new Position(i, j);
+                            Piece capturedPiece = pieceMoevement(origin, new Position(i, j));
+                            bool checkTest = inCheck(color);
+                            undoMovement(origin, destiny, capturedPiece);
+                            if (!checkTest)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
 
         public void putNewPiece(char col, int row, Piece piece)
         {

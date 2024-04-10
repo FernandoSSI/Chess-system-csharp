@@ -39,8 +39,10 @@ namespace Chess_system_csharp
                         Console.WriteLine(e.Message);
                         Console.ReadLine();
                     }
-                } 
-                
+                }
+                Console.Clear();
+                UI.printMatch(match);
+
             }
             catch (BoardException e)
             {

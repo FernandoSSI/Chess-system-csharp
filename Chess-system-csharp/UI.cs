@@ -17,7 +17,20 @@ namespace Chess_system_csharp
             printCapturedPieces(match);
             Console.WriteLine();
             Console.WriteLine("Turn: " + match.turn);
-            Console.WriteLine("Waiting for move: " + match.currentPlayer);
+           
+
+            if (!match.finished)
+            {
+                Console.WriteLine("Waiting for move: " + match.currentPlayer);
+                if (match.Check)
+                {
+                    Console.WriteLine("Check!");
+                }
+            } else
+            {
+                Console.WriteLine("CHECKMATE");
+                Console.WriteLine("Winner: " + match.currentPlayer);
+            }
         }
 
 
@@ -34,10 +47,7 @@ namespace Chess_system_csharp
             Console.ForegroundColor = aux;
             Console.WriteLine();
 
-            if (match.Check)
-            {
-                Console.WriteLine("Check!");
-            }
+           
         }
 
         public static void printSet(HashSet<Piece> set)
