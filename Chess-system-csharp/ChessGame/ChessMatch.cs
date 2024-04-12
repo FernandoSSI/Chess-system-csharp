@@ -102,7 +102,7 @@ namespace Chess_system_csharp.ChessGame
 
         public void validateDestinyPosition(Position origin, Position destiny)
         {
-            if (!Board.piece(origin).canMoveTo(destiny))
+            if (!Board.piece(origin).possibleMovement(destiny))
             {
                 throw new BoardException("Invalid destiny position");
             }
@@ -231,6 +231,15 @@ namespace Chess_system_csharp.ChessGame
 
         private void putPieces()
         {
+            
+            putNewPiece('a', 2, new Pawn(Board, Color.White));
+            putNewPiece('b', 2, new Pawn(Board, Color.White));
+            putNewPiece('c', 2, new Pawn(Board, Color.White));
+
+            putNewPiece('a', 7, new Pawn(Board, Color.Black));
+            putNewPiece('b', 7, new Pawn(Board, Color.Black));
+            putNewPiece('c', 7, new Pawn(Board, Color.Black));
+            
 
             putNewPiece('h', 1, new Rook(Board, Color.White));
             putNewPiece('a', 1, new Rook(Board, Color.White));
