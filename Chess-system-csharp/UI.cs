@@ -24,7 +24,7 @@ namespace Chess_system_csharp
                 Console.WriteLine("Waiting for move: " + match.currentPlayer);
                 if (match.Check)
                 {
-                    Console.WriteLine("Check!");
+                    Console.WriteLine("CHECK!");
                 }
             } else
             {
