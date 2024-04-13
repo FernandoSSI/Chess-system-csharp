@@ -241,6 +241,7 @@ namespace Chess_system_csharp.ChessGame
             putNewPiece('b', 7, new Pawn(Board, Color.Black));
             putNewPiece('c', 7, new Bishop(Board, Color.Black));
             putNewPiece('d', 7, new Queen(Board, Color.Black));
+            putNewPiece('e', 4, new Knight(Board, Color.Black));
 
             putNewPiece('h', 1, new Rook(Board, Color.White));
             putNewPiece('a', 1, new Rook(Board, Color.White));
