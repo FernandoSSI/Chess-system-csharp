@@ -40,6 +40,27 @@ namespace Chess_system_csharp.ChessGame
             if(capturedPiece != null) {
                 capturedPieces.Add(capturedPiece);
             }
+
+            //#Special move: short castling
+            if (p is King && destiny.col == origin.col + 2)
+            {
+                Position rookOrigin = new Position(origin.row, origin.col + 3);
+                Position rookDestiny = new Position(origin.row, origin.col + 1);
+                Piece rook = Board.removePiece(rookOrigin);
+                rook.movementIncrement();
+                Board.putPiece(rook, rookDestiny);
+            }
+
+            //#Special move: long castling
+            if (p is King && destiny.col == origin.col - 2)
+            {
+                Position rookOrigin = new Position(origin.row, origin.col - 4);
+                Position rookDestiny = new Position(origin.row, origin.col - 1);
+                Piece rook = Board.removePiece(rookOrigin);
+                rook.movementIncrement();
+                Board.putPiece(rook, rookDestiny);
+            }
+
             return capturedPiece;
         }
 
@@ -53,6 +74,30 @@ namespace Chess_system_csharp.ChessGame
                 capturedPieces.Remove(capturedPiece);
             }
             Board.putPiece(p, origin);
+
+
+            //#Special move: short castling
+            if (p is King && destiny.col == origin.col + 2)
+            {
+                Position rookOrigin = new Position(origin.row, origin.col + 3);
+                Position rookDestiny = new Position(origin.row, origin.col + 1);
+                Piece rook = Board.removePiece(rookDestiny);
+                rook.movementDecrement();
+                Board.putPiece(rook, rookOrigin);
+            }
+
+            //#Special move: long castling
+            if (p is King && destiny.col == origin.col - 2)
+            {
+                Position rookOrigin = new Position(origin.row, origin.col - 4);
+                Position rookDestiny = new Position(origin.row, origin.col - 1);
+                Piece rook = Board.removePiece(rookDestiny);
+                rook.movementIncrement();
+                Board.putPiece(rook, rookOrigin);
+            }
+
+
+
         }
 
         public void makePlay(Position origin, Position destiny)
@@ -247,8 +292,8 @@ namespace Chess_system_csharp.ChessGame
             putNewPiece('a', 1, new Rook(Board, Color.White));
             putNewPiece('a', 8, new Rook(Board, Color.Black));
             putNewPiece('h', 8, new Rook(Board, Color.Black));
-            putNewPiece('e', 1, new King(Board, Color.White));
-            putNewPiece('e', 8, new King(Board, Color.Black));
+            putNewPiece('e', 1, new King(Board, Color.White, this));
+            putNewPiece('e', 8, new King(Board, Color.Black, this));
 
 
         }
