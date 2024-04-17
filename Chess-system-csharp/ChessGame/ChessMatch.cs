@@ -19,6 +19,8 @@ namespace Chess_system_csharp.ChessGame
         private HashSet<Piece> capturedPieces;
         public bool Check {  get; private set; }
 
+        public Piece vulnerablePieceInPassant { get; private set;}
+
         public ChessMatch()
         {
             Board = new Board(8, 8);
@@ -27,6 +29,7 @@ namespace Chess_system_csharp.ChessGame
             finished = false;
             pieces = new HashSet<Piece>();
             capturedPieces = new HashSet<Piece>();
+            vulnerablePieceInPassant = null;
             Check = false;
             putPieces();
         }
@@ -60,6 +63,26 @@ namespace Chess_system_csharp.ChessGame
                 rook.movementIncrement();
                 Board.putPiece(rook, rookDestiny);
             }
+
+            //#Special move: in passant
+            if(p is Pawn)
+            {
+                if (origin.col != destiny.col && capturedPiece == null)
+                {
+                    Position posP;
+                    if(p.Color == Color.White)
+                    {
+                        posP = new Position(destiny.row+1, destiny.col);
+                    } else
+                    {
+                        posP = new Position(destiny.row - 1, destiny.col);
+
+                    }
+                    capturedPiece = Board.removePiece(posP);
+                    capturedPieces.Add(capturedPiece);
+                }
+            }
+
 
             return capturedPiece;
         }
@@ -96,7 +119,24 @@ namespace Chess_system_csharp.ChessGame
                 Board.putPiece(rook, rookOrigin);
             }
 
-
+            //#Special move: in passant
+            if(p is Pawn)
+            {
+                if(origin.col != destiny.col && capturedPiece == vulnerablePieceInPassant)
+                {
+                    Piece pawn = Board.removePiece(destiny);
+                    Position posP;
+                    if(p.Color == Color.White)
+                    {
+                        posP = new Position(3, destiny.col);
+                    } else
+                    {
+                        posP = new Position(4, destiny.col);
+                    }
+                    Board.putPiece(pawn, posP);
+                }
+                
+            }
 
         }
 
@@ -122,10 +162,23 @@ namespace Chess_system_csharp.ChessGame
             {
                 finished = true;
                 changePlayer();
+            } else
+            {
+                turn++;
+                changePlayer();
             }
 
-            turn++;
-            changePlayer();
+
+            Piece p = Board.piece(destiny);
+
+            //#Special move: in passant
+            if(p is Pawn && (destiny.row == origin.row+2 || destiny.row == origin.row - 2))
+            {
+                vulnerablePieceInPassant = p;
+            } else {
+                vulnerablePieceInPassant = null;
+            }
+           
         }
 
         public void validateOriginPosition(Position pos)
@@ -277,13 +330,13 @@ namespace Chess_system_csharp.ChessGame
         private void putPieces()
         {
             
-            putNewPiece('a', 2, new Pawn(Board, Color.White));
-            putNewPiece('b', 2, new Pawn(Board, Color.White));
+            putNewPiece('a', 2, new Pawn(Board, Color.White, this));
+            putNewPiece('b', 2, new Pawn(Board, Color.White, this));
             putNewPiece('c', 2, new Bishop(Board, Color.White));
             putNewPiece('d', 2, new Queen(Board, Color.White));
 
-            putNewPiece('a', 7, new Pawn(Board, Color.Black));
-            putNewPiece('b', 7, new Pawn(Board, Color.Black));
+            putNewPiece('a', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('b', 7, new Pawn(Board, Color.Black, this));
             putNewPiece('c', 7, new Bishop(Board, Color.Black));
             putNewPiece('d', 7, new Queen(Board, Color.Black));
             putNewPiece('e', 4, new Knight(Board, Color.Black));

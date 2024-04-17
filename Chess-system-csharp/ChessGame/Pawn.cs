@@ -11,8 +11,11 @@ namespace Chess_system_csharp.ChessGame
 {
     internal class Pawn : Piece
     {
+        private ChessMatch match;
 
-        public Pawn(Board board , Color color) :base(color, board) { }
+        public Pawn(Board board , Color color, ChessMatch match) :base(color, board) { 
+            this.match = match;
+        }
 
         public override string ToString()
         {
@@ -65,6 +68,23 @@ namespace Chess_system_csharp.ChessGame
                 {
                     mat[pos.row, pos.col] = true;
                 }
+
+                //#Special move: in passant
+                if(Position.row == 3)
+                {
+                    Position left = new Position(Position.row, Position.col - 1);
+                    Position right = new Position(Position.row, Position.col + 1);
+
+                    if(Board.validPosition(left) && enemy(left) && Board.piece(left) == match.vulnerablePieceInPassant)
+                    {
+                        mat[left.row-1, left.col] = true;
+                    }
+
+                    if (Board.validPosition(right) && enemy(right) && Board.piece(right) == match.vulnerablePieceInPassant)
+                    {
+                        mat[right.row-1, right.col] = true;
+                    }
+                }
                 
             }
 
@@ -96,6 +116,24 @@ namespace Chess_system_csharp.ChessGame
                 {
                     mat[pos.row, pos.col] = true;
                 }
+
+                //#Special move: in passant
+                if (Position.row == 4)
+                {
+                    Position left = new Position(Position.row, Position.col - 1);
+                    Position right = new Position(Position.row, Position.col + 1);
+
+                    if (Board.validPosition(left) && enemy(left) && Board.piece(left) == match.vulnerablePieceInPassant)
+                    {
+                        mat[left.row+1, left.col] = true;
+                    }
+
+                    if (Board.validPosition(right) && enemy(right) && Board.piece(right) == match.vulnerablePieceInPassant)
+                    {
+                        mat[right.row+1, right.col] = true;
+                    }
+                }
+
 
             }
 
