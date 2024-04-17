@@ -11,15 +11,15 @@ namespace Chess_system_csharp.ChessGame
     internal class ChessMatch
     {
 
-        public Board Board {  get; private set; }
-        public int turn {  get; private set; }
-        public Color currentPlayer {  get; private set; }
-        public bool finished {  get; private set; }
+        public Board Board { get; private set; }
+        public int turn { get; private set; }
+        public Color currentPlayer { get; private set; }
+        public bool finished { get; private set; }
         private HashSet<Piece> pieces;
         private HashSet<Piece> capturedPieces;
-        public bool Check {  get; private set; }
+        public bool Check { get; private set; }
 
-        public Piece vulnerablePieceInPassant { get; private set;}
+        public Piece vulnerablePieceInPassant { get; private set; }
 
         public ChessMatch()
         {
@@ -40,7 +40,8 @@ namespace Chess_system_csharp.ChessGame
             p.movementIncrement();
             Piece capturedPiece = Board.removePiece(destiny);
             Board.putPiece(p, destiny);
-            if(capturedPiece != null) {
+            if (capturedPiece != null)
+            {
                 capturedPieces.Add(capturedPiece);
             }
 
@@ -65,15 +66,16 @@ namespace Chess_system_csharp.ChessGame
             }
 
             //#Special move: in passant
-            if(p is Pawn)
+            if (p is Pawn)
             {
                 if (origin.col != destiny.col && capturedPiece == null)
                 {
                     Position posP;
-                    if(p.Color == Color.White)
+                    if (p.Color == Color.White)
                     {
-                        posP = new Position(destiny.row+1, destiny.col);
-                    } else
+                        posP = new Position(destiny.row + 1, destiny.col);
+                    }
+                    else
                     {
                         posP = new Position(destiny.row - 1, destiny.col);
 
@@ -91,7 +93,7 @@ namespace Chess_system_csharp.ChessGame
         {
             Piece p = Board.removePiece(destiny);
             p.movementDecrement();
-            if(capturedPiece != null)
+            if (capturedPiece != null)
             {
                 Board.putPiece(capturedPiece, destiny);
                 capturedPieces.Remove(capturedPiece);
@@ -120,22 +122,23 @@ namespace Chess_system_csharp.ChessGame
             }
 
             //#Special move: in passant
-            if(p is Pawn)
+            if (p is Pawn)
             {
-                if(origin.col != destiny.col && capturedPiece == vulnerablePieceInPassant)
+                if (origin.col != destiny.col && capturedPiece == vulnerablePieceInPassant)
                 {
                     Piece pawn = Board.removePiece(destiny);
                     Position posP;
-                    if(p.Color == Color.White)
+                    if (p.Color == Color.White)
                     {
                         posP = new Position(3, destiny.col);
-                    } else
+                    }
+                    else
                     {
                         posP = new Position(4, destiny.col);
                     }
                     Board.putPiece(pawn, posP);
                 }
-                
+
             }
 
         }
@@ -150,35 +153,57 @@ namespace Chess_system_csharp.ChessGame
                 throw new BoardException("you can't put yourself in check");
             }
 
-            if(inCheck(adversary(currentPlayer)))
+            Piece p = Board.piece(destiny);
+
+            //#Special move: promotion
+            if (p is Pawn)
+            {
+                if ((p.Color == Color.White && destiny.row == 0) || (p.Color == Color.Black && destiny.row == 7))
+                {
+                    p = Board.removePiece(destiny);
+                    pieces.Remove(p);
+                    Piece queen = new Queen(Board, p.Color);
+                    Board.putPiece(queen, destiny);
+                    pieces.Add(queen);
+
+
+                }
+            }
+
+            if (inCheck(adversary(currentPlayer)))
             {
                 Check = true;
-            } else
+            }
+            else
             {
                 Check = false;
             }
+
 
             if (checkmateTest(adversary(currentPlayer)))
             {
                 finished = true;
                 changePlayer();
-            } else
+            }
+            else
             {
                 turn++;
                 changePlayer();
             }
 
 
-            Piece p = Board.piece(destiny);
+
 
             //#Special move: in passant
-            if(p is Pawn && (destiny.row == origin.row+2 || destiny.row == origin.row - 2))
+            if (p is Pawn && (destiny.row == origin.row + 2 || destiny.row == origin.row - 2))
             {
                 vulnerablePieceInPassant = p;
-            } else {
+            }
+            else
+            {
                 vulnerablePieceInPassant = null;
             }
-           
+
         }
 
         public void validateOriginPosition(Position pos)
@@ -188,7 +213,8 @@ namespace Chess_system_csharp.ChessGame
                 throw new BoardException("There is no piece in the chosen position");
             }
 
-            if(currentPlayer != Board.piece(pos).Color) {
+            if (currentPlayer != Board.piece(pos).Color)
+            {
                 throw new BoardException("it is not the turn of the chosen piece");
             }
 
@@ -208,10 +234,11 @@ namespace Chess_system_csharp.ChessGame
 
         private void changePlayer()
         {
-            if(currentPlayer == Color.White)
+            if (currentPlayer == Color.White)
             {
                 currentPlayer = Color.Black;
-            } else
+            }
+            else
             {
                 currentPlayer = Color.White;
             }
@@ -221,9 +248,9 @@ namespace Chess_system_csharp.ChessGame
         {
             HashSet<Piece> aux = new HashSet<Piece>();
 
-            foreach(Piece x in capturedPieces)
+            foreach (Piece x in capturedPieces)
             {
-                if(x.Color == color)
+                if (x.Color == color)
                 {
                     aux.Add(x);
                 }
@@ -251,7 +278,8 @@ namespace Chess_system_csharp.ChessGame
             if (color == Color.White)
             {
                 return Color.Black;
-            } else
+            }
+            else
             {
                 return Color.White;
             }
@@ -259,23 +287,23 @@ namespace Chess_system_csharp.ChessGame
 
         private Piece king(Color color)
         {
-            foreach(Piece x in piecesInPlay(color))
+            foreach (Piece x in piecesInPlay(color))
             {
-                if(x is King)
+                if (x is King)
                 {
                     return x;
                 }
-                
+
             }
             return null;
         }
 
         public bool inCheck(Color color)
         {
-            foreach(Piece x in piecesInPlay(adversary(color)))
+            foreach (Piece x in piecesInPlay(adversary(color)))
             {
                 Piece k = king(color);
-                if(k == null)
+                if (k == null)
                 {
                     throw new BoardException("Dont exist king");
                 }
@@ -296,12 +324,12 @@ namespace Chess_system_csharp.ChessGame
                 return false;
             }
 
-            foreach(Piece x in piecesInPlay(color))
+            foreach (Piece x in piecesInPlay(color))
             {
                 bool[,] mat = x.possibleMovements();
-                for(int i=0; i<Board.Rows; i++)
+                for (int i = 0; i < Board.Rows; i++)
                 {
-                    for(int j=0; j<Board.Cols; j++)
+                    for (int j = 0; j < Board.Cols; j++)
                     {
                         if (mat[i, j])
                         {
@@ -329,25 +357,52 @@ namespace Chess_system_csharp.ChessGame
 
         private void putPieces()
         {
-            
+
             putNewPiece('a', 2, new Pawn(Board, Color.White, this));
             putNewPiece('b', 2, new Pawn(Board, Color.White, this));
-            putNewPiece('c', 2, new Bishop(Board, Color.White));
-            putNewPiece('d', 2, new Queen(Board, Color.White));
+            putNewPiece('c', 2, new Pawn(Board, Color.White, this));
+            putNewPiece('d', 2, new Pawn(Board, Color.White, this));
+            putNewPiece('e', 2, new Pawn(Board, Color.White, this));
+            putNewPiece('f', 2, new Pawn(Board, Color.White, this));
+            putNewPiece('g', 2, new Pawn(Board, Color.White, this));
+            putNewPiece('h', 2, new Pawn(Board, Color.White, this));
 
-            putNewPiece('a', 7, new Pawn(Board, Color.Black, this));
-            putNewPiece('b', 7, new Pawn(Board, Color.Black, this));
-            putNewPiece('c', 7, new Bishop(Board, Color.Black));
-            putNewPiece('d', 7, new Queen(Board, Color.Black));
-            putNewPiece('e', 4, new Knight(Board, Color.Black));
+            putNewPiece('e', 1, new King(Board, Color.White, this));
+
+            putNewPiece('d', 1, new Queen(Board, Color.White));
+
+            putNewPiece('c', 1, new Bishop(Board, Color.White));
+            putNewPiece('f', 1, new Bishop(Board, Color.White));
 
             putNewPiece('h', 1, new Rook(Board, Color.White));
             putNewPiece('a', 1, new Rook(Board, Color.White));
-            putNewPiece('a', 8, new Rook(Board, Color.Black));
-            putNewPiece('h', 8, new Rook(Board, Color.Black));
-            putNewPiece('e', 1, new King(Board, Color.White, this));
+
+            putNewPiece('b', 1, new Knight(Board, Color.White));
+            putNewPiece('g', 1, new Knight(Board, Color.White));
+
+
+            putNewPiece('a', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('b', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('c', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('d', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('e', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('f', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('g', 7, new Pawn(Board, Color.Black, this));
+            putNewPiece('h', 7, new Pawn(Board, Color.Black, this));
+            
             putNewPiece('e', 8, new King(Board, Color.Black, this));
 
+            putNewPiece('d', 8, new Queen(Board, Color.Black));
+
+            putNewPiece('c', 8, new Bishop(Board, Color.Black));
+            putNewPiece('f', 8, new Bishop(Board, Color.Black));
+
+            putNewPiece('h', 8, new Rook(Board, Color.Black));
+            putNewPiece('a', 8, new Rook(Board, Color.Black));
+
+            putNewPiece('b', 8, new Knight(Board, Color.Black));
+            putNewPiece('g', 8, new Knight(Board, Color.Black));
+            
 
         }
     }
